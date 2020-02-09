@@ -1,14 +1,15 @@
-
-from keras.preprocessing.image import ImageDataGenerator
+from sklearn import preprocessing
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
-
 import keras.backend as K
-import struct;print(struct.calcsize("P") * 8)
 import glob
-from PIL import Image
 import numpy as np
+import pandas as pd
+from matplotlib import image
+import pickle
+from matplotlib import pyplot
+
 from sklearn.model_selection import train_test_split
 
 img_width, img_height = 480, 320
@@ -19,14 +20,21 @@ label_data = []
 
 for sub_directory in glob.glob(data_dir):
     for image_dir in glob.glob(sub_directory + "\\*"):
-        image = Image.open(image_dir)
-        image_data.append(image)
+        data = image.imread(image_dir)
+        print(data.dtype)
+        print(data.shape)
+        # display the array of pixels as an image
+        '''
+        pyplot.imshow(data)
+        pyplot.show()
+        '''
+        image_data.append(data)
         label_data.append(sub_directory)
 
 if K.image_data_format() == 'channels_first':
-    input_shape = (3, img_width, img_height)
+    input_shape = (3, img_height, img_width)
 else:
-    input_shape = (img_width, img_height, 3)
+    input_shape = (img_height, img_width, 3)
 
 model = Sequential()
 model.add(Conv2D(32, (2, 2), input_shape=input_shape))
@@ -52,10 +60,17 @@ model.compile(loss='binary_crossentropy',
               optimizer='rmsprop',
               metrics=['accuracy'])
 
-X_train, X_test, y_train, y_test = train_test_split(
-    image_data, label_data, test_size=0.25, random_state=42)
+le = preprocessing.LabelEncoder()
+s = pd.Series(label_data)
 
-for i in X_train:
-    print(i)
+levels = pd.factorize(s)
+print(levels[0])
 
-#for image, label in zip(image_data, label_data):
+'''
+model.fit(np.array(image_data), np.array(levels[0]), validation_split=0.10, epochs=10, batch_size=10)
+'''
+
+model.fit(np.array(image_data), np.array(levels[0]))
+# save the model to disk
+filename = 'model.sav'
+pickle.dump(model, open(filename, 'wb'))
