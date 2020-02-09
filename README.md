@@ -1,7 +1,5 @@
 # RecyclingProjectML
 
-This project includes the application that will run on automat.
-
 ## Notes
 
 Python3.6 is used in this project
