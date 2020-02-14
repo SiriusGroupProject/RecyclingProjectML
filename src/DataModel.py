@@ -21,8 +21,6 @@ label_data = []
 for sub_directory in glob.glob(data_dir):
     for image_dir in glob.glob(sub_directory + "\\*"):
         data = image.imread(image_dir)
-        print(data.dtype)
-        print(data.shape)
         # display the array of pixels as an image
         '''
         pyplot.imshow(data)
@@ -64,13 +62,9 @@ le = preprocessing.LabelEncoder()
 s = pd.Series(label_data)
 
 levels = pd.factorize(s)
-print(levels[0])
 
-'''
-model.fit(np.array(image_data), np.array(levels[0]), validation_split=0.10, epochs=10, batch_size=10)
-'''
-
-model.fit(np.array(image_data), np.array(levels[0]))
+print(np.array(levels[0]))
+model.fit(np.array(image_data), np.array(levels[0]), validation_split=0.25, epochs=5, batch_size=10)
 # save the model to disk
 filename = 'model.sav'
 pickle.dump(model, open(filename, 'wb'))
