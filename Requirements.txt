@@ -2,8 +2,8 @@ matplotlib
 pandas
 numpy
 scikit-learn
-keras==2.1.5
-tensorflow==1.5.0
-protobuf==3.4.0
-imageai==2.1.5
+keras
+tensorflow
+protobuf
+imageai
 opencv-python

@@ -2,7 +2,7 @@
 
 ## Notes
 
-Python3.6 is used in this project
+Python3.7.5 is used in this project
 
 To install requirements of this project run this command:
 

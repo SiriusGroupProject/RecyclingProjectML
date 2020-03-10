@@ -10,17 +10,18 @@ import pickle
 import os
 
 img_width, img_height = 480, 320
-data_dir = '..\\train_data\\*'
+data_dir = '../train_data/*'
 image_data = []
 label_data = []
 
 for sub_directory in glob.glob(data_dir):
-    for image_dir in glob.glob(sub_directory + "\\*"):
+    for image_dir in glob.glob(sub_directory + "/*"):
         if os.path.basename(sub_directory).startswith("cam") or os.path.basename(sub_directory).startswith("teneke"):
             print(image_dir)
             data = image.imread(image_dir)
             image_data.append(data)
             label_data.append(sub_directory)
+
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_height, img_width)
